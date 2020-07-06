@@ -22,7 +22,7 @@ class TodoApp():
 		print('\n\n=====--===\n1. Login\n2. SignUp\n=====--===\n\n')
 
 	def showSecondMenu(self):
-		print('\n\n--------------------\n1. See Todos\n2. Add Todo\n3. Logout\n4. Logout and Quit\n--------------------\n\n')
+		print('\n\n--------------------\n1. See Todos\n2. Add Todo\n3. Delete Todo\n4. Logout\n5. Logout and Quit\n--------------------\n\n')
 
 	def userInput(self):
 		''' get input from user'''
@@ -54,10 +54,18 @@ class TodoApp():
 			newTodo = input('Insert Todo: ')
 			self.insertTodo(newTodo, user_object['_id'])
 		elif (argument == 3):
-			self.firstMenu()
+			index = self.userInput()
+			self.deleteTodo(index-1, user_object['_id'])
 		elif (argument == 4):
+			self.firstMenu()
+		elif (argument == 5):
 			sys.exit()
 
+	def deleteTodo(self, index, user_id):
+		todoID = todoCollection.find({'username' : user_id})[index]['_id']
+		todoCollection.delete_one({'_id' : todoID})
+		print('Deleted Todo')
+		
 
 	def login(self):
 		''' login user '''
@@ -98,8 +106,9 @@ class TodoApp():
 			userCollection.insert_one({'username' : username, 'password' : password})
 			print('Succesfully Signed Up a new user!2')
 			break
-
+	
 	def removeTodo(self):
 		# to be continue
+		pass
 
 app = TodoApp()
